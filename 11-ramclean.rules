@@ -1,0 +1,1 @@
+ACTION=="remove", ENV{ID_SERIAL}=="0x403c8208",SUBSYSTEM=="block", RUN+="/bin/kexec -fe"

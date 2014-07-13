@@ -1,0 +1,55 @@
+#!/bin/sh
+mount proc
+#grep -qw multivt /proc/cmdline && sed -i s/^#tty/tty/ /etc/inittab
+#if ! grep -qw noembed /proc/cmdline; then
+
+#  inodes=`grep MemFree /proc/meminfo | awk '{print $2/3}' | cut -d. -f1`
+
+#  mount / -o remount,size=90%,nr_inodes=$inodes
+#  umount proc
+#  exec /sbin/init
+#fi
+#umount proc
+#if mount -t tmpfs -o size=90% tmpfs /mnt; then
+#  if tar -C / --exclude=mnt -cf - . | tar -C /mnt/ -xf - ; then
+ #   mkdir /mnt/mnt
+#    exec /sbin/switch_root mnt /sbin/init
+#  fi
+#fi
+
+echo 3   > /proc/sys/kernel/printk
+
+echo 3   > /proc/sys/vm/drop_caches
+echo 256 > /proc/sys/vm/min_free_kbytes
+
+echo 1   > /proc/sys/vm/overcommit_memory
+echo 1   > /proc/sys/vm/oom_kill_allocating_task
+echo 0   > /proc/sys/vm/oom_dump_tasks
+
+for i in $(seq 0 3) ; do 
+echo -e "\n$i:\n"
+/bin/smem "-llfv"
+done
+wait
+clear
+echo "GOING TO SLEEP!"
+sleep 2 
+#600
+
+
+echo 1 > /proc/sys/kernel/sysrq
+echo o > /proc/sysrq-trigger
+
+
+#exec /sbin/halt -fn
+
+#while true; do
+
+#echo "zezadas"  
+#echo "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU" >> /dev/kmsg
+
+#done
+
+sleep 20
+
+#exec /sbin/init

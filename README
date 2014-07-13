@@ -1,0 +1,40 @@
+How to make it work.
+-On startup a service load a kernel image with a built in initram on ram
+-When the sd card is removed, a udev rule is triggered and kexec load the new kernel that was previously loaded on ram.
+-The PC no boot our modded kernel, sdmem is triggered and starts to clean all ram
+-Finaly when the job is done. your computer poweroff.
+
+
+depends on: kexec
+
+
+Instructions:
+create a direcory in /etc
+  mkdir /etc/ramclean 
+
+copy ramzadas to /etc/ramclean
+  cp -r ramzadas /etc/ramclean
+
+(if you dont want to compile the kernel just do "cp vmlinuz /etc/ramclean/vmlinuz" and go to line 30)  
+Download linux source... any kernel will be acceptable
+copy config to the kernel source
+  cp config /usr/src/linux
+
+compile the kernel with the config  (for maximum power do, make -j8)
+  cd /usr/src/linux
+  make -j8
+    the kernel will build with no modules and builtin initramfs
+copy compiled kernel to /etc/ramclean
+  cp arch/x86/boot/bzImage /etc/ramclean/vmlinuz
+
+plug sd card and change the follow udev rule to match with your device
+  copy 11-ramclean.rules to /etc/udev/rules.d/
+
+copy ramclean.service to systemd services
+  cp ramclean.service /usr/lib/systemd/systemd
+enable the service
+  systemctl enable ramclean
+start the service
+  systemctl start ramclean
+  
+Now try to remove your device and see what happens

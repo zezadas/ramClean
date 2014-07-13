@@ -1,0 +1,12 @@
+[Unit]
+Description=ramclean
+Wants=local-fs.target
+
+[Service]
+ExecStart=/bin/kexec -l /etc/ramclean/vmlinuz
+#ExecReload=/usr/bin/kill -HUP $MAINPID
+#User=anon
+
+[Install]
+WantedBy=multi-user.target
+
